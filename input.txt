@@ -1,0 +1,5 @@
+the cow under the table shoots . hasparse
+
+a dead woman likes he . notparse
+
+a dead woman likes him . hasparse

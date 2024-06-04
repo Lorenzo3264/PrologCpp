@@ -1,0 +1,37 @@
+[the,cow,under,the,table,shoots]
+
+s(
+   np(
+      det(the)
+      n(cow)
+      prepW(
+         prep(under)
+         np(
+            det(the)
+            n(table)
+            )
+         )
+      )
+   vp(v(shoots))
+   )
+
+
+[a,dead,woman,likes,he]
+
+no
+
+[a,dead,woman,likes,him]
+
+s(
+   np(
+      det(a)
+      adj(dead)
+      n(woman)
+      )
+   vp(
+      v(likes)
+      np(pron(him))
+      )
+   )
+
+
