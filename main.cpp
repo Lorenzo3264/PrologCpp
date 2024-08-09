@@ -101,6 +101,22 @@ int main(int argc, char** argv)
     cout << "out: " << av[0].as_string() << "\n";
     q.next_solution();
     cout << "out: " << av[0].as_string() << "\n";
+
+    PlTermv arrayv(2);
+    makePrologList(phrase, arrayv[1]);
+    
+    PlQuery query("smallProject", "main", arrayv);
+    try {
+        PlCheckFail(query.next_solution());
+    }
+    catch (PlException e) {
+        cerr << "out: " << e.what() << "\n";
+    }
+    catch (PlFail f) {
+        cerr << "query fallita :(\n";
+    }
+    
+    cout << "out: " << arrayv[0].as_string() << "\n";
     /*for (PlTermv& elem : myOutputs) {
         cout << "out: " << elem[0].as_string() << "\n";
     }*/
