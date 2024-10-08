@@ -84,9 +84,10 @@ int assertRule(const char* ruleName, PlTermv terms) {
 int main(int argc, char** argv)
 {
     if(!initializeProlog(argc, argv)) return 0;
-
-    openPrologFile("bigProject");
     vector<string> phrase({ "the","woman","likes","the","man" });
+    openPrologFile("bigProject");
+    PlEngine engine(argv[0]);
+   
     PlTermv av(1);
     vector<PlTermv> myOutputs;
 
@@ -95,17 +96,38 @@ int main(int argc, char** argv)
     cout << "result: " << assertRule("white", PlTermv(PlAtom("chocolate"))) << "\n";
     
     cout << "result: " << assertRule("white", PlTermv(PlAtom("paper"))) << "\n";
+
+    PlCall("assert", PlTermv(PlCompound("white(canvas)")));
+
+    PlCall("assert", PlTermv(PlCompound("myprint :- write('soy un poco loco')")));
     
     PlQuery q("white", av);
     q.next_solution();
     cout << "out: " << av[0].as_string() << "\n";
     q.next_solution();
     cout << "out: " << av[0].as_string() << "\n";
+    q.next_solution();
+    cout << "out: " << av[0].as_string() << "\n";
 
-    PlTermv arrayv(2);
-    makePrologList(phrase, arrayv[1]);
-    
-    PlQuery query("smallProject", "main", arrayv);
+    PlQuery qWrite("myprint", PlTermv());
+    //qWrite.next_solution();
+    try{
+        PlCheckFail(qWrite.next_solution());
+    }catch(PlFail f) {
+        cerr << "query fallita\n";
+    }
+    catch (PlException e) {
+        cerr << "unexpected error\n";
+    }
+
+    engine.cleanup();
+    if (!initializeProlog(argc, argv)) return 0;
+    openPrologFile("bigProject");
+
+    PlTermv res(2);
+    res[0].unify_term(PlCompound("X"));
+    res[1].unify_term(PlCompound("[the, woman, likes, the, man]"));
+    PlQuery query("smallProject", "main", res);
     try {
         PlCheckFail(query.next_solution());
     }
@@ -115,8 +137,9 @@ int main(int argc, char** argv)
     catch (PlFail f) {
         cerr << "query fallita :(\n";
     }
+
     
-    cout << "out: " << arrayv[0].as_string() << "\n";
+    cout << "out: " << res[0].as_string() << "\n";
     /*for (PlTermv& elem : myOutputs) {
         cout << "out: " << elem[0].as_string() << "\n";
     }*/
